@@ -8,7 +8,7 @@ import socket
 def commands(nick,channel,message):
   global optout_nicks
   if message.find(botnick+': about')!=-1 or message.find(botnick+' about')!=-1:
-    ircsock.send('PRIVMSG %s :%s: I am an Emoji bot that adds emoji auto corrects. Go [git-url] for more info.!\r\n' % (channel,nick))
+    ircsock.send('PRIVMSG %s :%s: I am an Emoji bot that adds emoji auto corrects. Go https://github.com/wilfriedE/EmoBot for more info.!\r\n' % (channel,nick))
   elif message.find(botnick+': optout')!=-1 or message.find(botnick+' optout')!=-1:
     if nick not in optout_nicks:
       optout_nicks += [nick]
