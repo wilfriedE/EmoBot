@@ -6,9 +6,12 @@ import re
 import socket 
 
 def commands(nick,channel,message):
+  if containsGreetings(message):
+    hello(channel, nick)
+
   global optout_nicks
   if message.find(botnick+': about')!=-1 or message.find(botnick+' about')!=-1:
-    ircsock.send('PRIVMSG %s :%s: I am an Emoji bot that adds emoji auto corrects. Go https://github.com/wilfriedE/EmoBot for more info.!\r\n' % (channel,nick))
+    ircsock.send('PRIVMSG %s :%s: I am an Emoji bot that adds emoji auto corrects. Go http://git.io/v05Ik for more info.!\r\n' % (channel,nick))
   elif message.find(botnick+': optout')!=-1 or message.find(botnick+' optout')!=-1:
     if nick not in optout_nicks:
       optout_nicks += [nick]
@@ -29,6 +32,22 @@ def opted_out_commads(nick, channel, message):
     ircsock.send('PRIVMSG %s :%s: You have been opted in %s .\r\n' % (channel,nick, Emo.get(":guitar:")))
   elif message.find(botnick+': help')!=-1 or message.find(botnick+' help')!=-1:
     ircsock.send('PRIVMSG %s :%s: Available commands [about, optin].\r\n' % (channel,nick))
+
+def containsGreetings(msg):
+  message = msg.lower()
+  if (message.find("hello "+ botnick) != -1 or
+    message.find("hi "+ botnick) != -1 or
+    message.find("hey "+ botnick) != -1 or
+    message.find(botnick+': hello')!=-1 or
+    message.find(botnick+': hi')!=-1 or
+    message.find(botnick+': hey')!=-1 or
+    message.find(botnick+' hello')!=-1 or
+    message.find(botnick+' hi')!=-1 or
+    message.find(botnick+' hey')!=-1
+    ):
+    return True
+  else:
+    False
 
 # Some basic variables used to configure the bot
 def ping():
@@ -58,7 +77,7 @@ def joinInvite(msg):
 
 def run():
   ircsock.connect((server, 6667)) # Here we connect to the server using the port 6667
-  ircsock.send("USER "+ botnick +" "+ botnick +" "+ botnick +" :Emojie Bot to ligthen up your day 😄. More at https://github.com/wilfriedE/EmoBot.\n") # user authentication
+  ircsock.send("USER "+ botnick +" "+ botnick +" "+ botnick +" :Emojie Bot to ligthen up your day 😄. More at http://git.io/v05Ik.\n") # user authentication
   ircsock.send("NICK "+ botnick +"\n") # here we actually assign the nick to the bot
 
   for channel in channels:
@@ -72,8 +91,6 @@ def run():
     nick = getNick(ircmsg)
 
     if nick not in optout_nicks:
-      if ircmsg.find(":Hello "+ botnick) != -1: # If we can find "Hello emo-bot" it will call the function hello()
-        hello(channel, nick)
       emojies = re.findall(r':([\w+-]+):', ircmsg)
       emojies = [ Emo.get(":"+emoji+":") for emoji in emojies if Emo.valid(":"+emoji+":")]
       if emojies:
