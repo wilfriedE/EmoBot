@@ -20,6 +20,8 @@ def commands(nick,channel,message):
     ircsock.send('PRIVMSG %s :%s: You are already been opted in %s .\r\n' % (channel,nick, Emo.get(":guitar:")))
   elif message.find(botnick+': help')!=-1 or message.find(botnick+' help')!=-1:
     ircsock.send('PRIVMSG %s :%s: Available commands [about, optout,].\r\n' % (channel,nick))
+  else:
+    print("Not a valid command")
 
 def opted_out_commads(nick, channel, message):
   """
