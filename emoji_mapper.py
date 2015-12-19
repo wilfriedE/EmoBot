@@ -17,6 +17,9 @@ for emoji in emojies:
 		for alias in emoji["aliases"]:
 			alias = alias.strip() #just in case it is not fully stripped by defualt
 			EmojiMap[":"+alias+":"] = emoji["emoji"].encode("utf-8")
+		for tag in emoji["tags"]:
+			tag = tag.strip()
+			EmojiMap[":"+tag+":"] = emoji["emoji"].encode("utf-8")
 
 if __name__ == '__main__':
 	print(EmojiMap)
